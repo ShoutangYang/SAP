@@ -100,15 +100,7 @@ spa.shell=(function () {
          setJqueryMap();
          stateMap.is_chat_retracted=true;
         jqueryMap.$chat.attr('title',cofigMap.chat_retracted_title).click(onClickChat);
-        
-        /*
-         setTimeout(function () {
-             toggleChat(true);
-         },3000 );
-         setTimeout(function () {
-             toggleChat(false)
-         },8000);
-         */
+
     };
     /*
     * 将函数导出

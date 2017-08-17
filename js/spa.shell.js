@@ -10,6 +10,10 @@ spa.shell=(function () {
     * */
     var
         cofigMap = {
+        //定义给uri
+        anchor_achema_map:{
+            chat:{open :true,close:false}
+        },
         main_html:
         '<div class="spa-shell-head">'
         + '<div class="spa-shell-head-logo"></div>'
@@ -35,11 +39,36 @@ spa.shell=(function () {
         * */
         stateMap={
             $container:null,
-            is_chat_retracted:true
+            is_chat_retracted:true,
+            anchor_map:{}
         },
         jqueryMap = {},
-        setJqueryMap,initModule,toggleChat;
+        setJqueryMap,initModule,toggleChat,
+        copyAnchorMap,changeAnchirPart,onChange;
 
+        copyAnchorMap=function () {
+          return $.extend(true,{},stateMap.anchor_map);
+        };
+
+        changeAnchirPart =function (arg_map) {
+          var
+              anchor_map_revise = copyAnchorMap(),
+              bool_return=true,
+              key_name,key_name_dep;
+          KEYVAL:
+          for( key_name in arg_map){
+              if(arg_map.hasOwnProperty(key_name)){
+                  if(key_name.indexOf('_')===0){
+                      continue KEYVAL;
+                  }
+                  anchor_map_revise[key_name]=arg_map[key_name];
+
+                  key_name_dep='_'+key_name;
+
+              }
+          }
+
+        };
     /*
     * 将DOM 保存在setJqueryMap集合中，减少历遍次数，提高性能；
     * */
@@ -60,6 +89,9 @@ spa.shell=(function () {
       if(is_sliding){
           return false;
       }
+      /*
+      * chat 展开
+      * */
       if(do_extend){
           jqueryMap.$chat.animate(
               {height:cofigMap.chat_extend_height},
@@ -74,6 +106,9 @@ spa.shell=(function () {
           );
           return true;
       }
+      /*
+      * chat 收缩
+      * */
       jqueryMap.$chat.animate(
           {height:cofigMap.chat_retract_height},
           cofigMap.chat_retract_time,
@@ -85,10 +120,15 @@ spa.shell=(function () {
               }
           }
       )
-        return false;
+        return true;
     };
     onClickChat = function (event) {
-      toggleChat(stateMap.is_chat_retracted);
+     if(toggleChat(stateMap.is_chat_retracted)){
+         console.log(stateMap.is_chat_retracted);
+         $.uriAnchor.setAnchor({
+             chat:(stateMap.is_chat_retracted ? 'open' : 'closed')
+         });
+     }
       return false;
     };
     /*

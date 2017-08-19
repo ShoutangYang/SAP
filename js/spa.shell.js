@@ -12,7 +12,7 @@ spa.shell = (function() {
         cofigMap = {
             //定义给uri
             anchor_achema_map: {
-                chat: { open: true, close: false }
+                chat: { open: true, close: true }
             },
             main_html: '<div class="spa-shell-head">' +
                 '<div class="spa-shell-head-logo"></div>' +
@@ -34,7 +34,7 @@ spa.shell = (function() {
             chat_extended_title: 'click to extend'
         },
         /*
-         * 中间变量，未保存状态
+         * 中间变量，未保存状态=
          * */
         stateMap = {
             $container: null,
@@ -43,13 +43,13 @@ spa.shell = (function() {
         },
         jqueryMap = {},
         setJqueryMap, initModule, toggleChat,
-        copyAnchorMap, changeAnchirPart, onChange;
+        copyAnchorMap, changeAnchorPart, onHashchange;
 
     copyAnchorMap = function() {
         return $.extend(true, {}, stateMap.anchor_map);
     };
 
-    changeAnchirPart = function(arg_map) {
+    changeAnchorPart = function(arg_map) {
         var
             anchor_map_revise = copyAnchorMap(),
             bool_return = true,
@@ -118,27 +118,6 @@ spa.shell = (function() {
             );
             return true;
         };
-
-        onchange = function(event) {
-            var
-                anchor_achema_previous = copyAnchorMap(),
-                anchor_achema_proposed,
-                _s_chat_previous, _s_chat_proposedm,
-                s_chat_proposed;
-
-            try {
-                anchor_achema_proposed = $.uriAnchor.makeAnchorMap();
-            } catch (error) {
-                $.uriAnchor.setAnchor(anchor_achema_previous, null, true);
-                return false;
-            }
-
-            stateMap.anchor_map = anchor_achema_proposed;
-
-            _s_chat_previous = anchor_achema_previous._s_chat;
-            _s_chat_proposed = anchor_achema_proposed._s_chat;
-
-        };
         /*
          * chat 收缩
          * */
@@ -154,13 +133,58 @@ spa.shell = (function() {
         )
         return true;
     };
-    onClickChat = function(event) {
-        if (toggleChat(stateMap.is_chat_retracted)) {
-            console.log(stateMap.is_chat_retracted);
-            $.uriAnchor.setAnchor({
-                chat: (stateMap.is_chat_retracted ? 'open' : 'closed')
-            });
+
+    onHashchange = function(event) {
+        var
+            anchor_achema_previous = copyAnchorMap(),
+            anchor_map_proposed,
+
+            _s_chat_previous, _s_chat_proposed,
+            s_chat_proposed;
+
+        try {
+            anchor_achema_proposed = $.uriAnchor.makeAnchorMap();
+            console.log(anchor_achema_proposed);
+        } catch (error) {
+            $.uriAnchor.setAnchor(anchor_achema_previous, null, true);
+            return false;
         }
+
+        stateMap.anchor_map = anchor_achema_proposed;
+
+        _s_chat_previous = anchor_achema_previous._s_chat;
+        _s_chat_proposed = anchor_achema_proposed._s_chat;
+        if (!anchor_achema_previous || _s_chat_previous !== s_chat_proposed) {
+            s_chat_proposed = anchor_achema_proposed.chat;
+            switch (s_chat_proposed) {
+                case 'open':
+                    toggleChat(true)
+                    break;
+                case 'closed':
+                    toggleChat(false);
+                    break;
+                default:
+                    toggleChat(false);
+                    delete anchor_achema_proposed.chat;
+                    $.uriAnchor.setAnchor(anchor_achema_proposed, null, true);
+
+            }
+        }
+        return false;
+
+    };
+
+
+    onClickChat = function(event) {
+      if (toggleChat(stateMap.is_chat_retracted)) {
+            console.log(stateMap.is_chat_retracted);
+           /* $.uriAnchor.setAnchor({
+                chat: (stateMap.is_chat_retracted ? 'open' : 'closed')
+            });*/
+        }
+        changeAnchorPart({
+            chat: (stateMap.is_chat_retracted ? 'open' : 'closed')
+        });
         return false;
     };
     /*
@@ -172,6 +196,11 @@ spa.shell = (function() {
         setJqueryMap();
         stateMap.is_chat_retracted = true;
         jqueryMap.$chat.attr('title', cofigMap.chat_retracted_title).click(onClickChat);
+        $.uriAnchor.configModule({
+            schema_map: cofigMap.anchor_achema_map
+        });
+        $(window).bind('hashchange', onHashchange)
+            .trigger('hashchange');
     };
     /*
      * 将函数导出

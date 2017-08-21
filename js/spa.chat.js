@@ -44,17 +44,46 @@ spa.chat=function () {
           slider_closed_em:2,
           slider_opened_title:'click to clode',
           slider_cloded_title:'click to open'
+
+          chat_model:null,
+          people_nodle:null,
+          set_chat_anchor:null
       },
-      stateMap ={$container:null},
+      stateMap ={
+          $container:null,
+          position_type:'closed',
+          px_per_em:0,
+          slider_hidden_px:0,
+          slider_closed_px:0,
+          slider_closed_px:0,
+
+      },
       jqueryMap={},
 
-      setJqueryMap,configModule,initModule
+      setJqueryMap,configModule,initModule,
+      getEmSize,setPxSize,setSilderPosition,onClickToggle
       ;
-
+  getEmSize= function () {
+      return Number(
+          getComputedStyle( elem,'').fontSize.match(/\d*.?\d*/)[0]
+      );
+  };
 
   setJqueryMap = function () {
-      var $container = stateMap.$container;
-      jqueryMap={$container:$container};
+      var $container = stateMap.$container,
+          $append_target=stateMap.$append_target,
+          $slider=$append_target.find('.spa-chat');
+      jqueryMap={
+          $container:$container,
+          $slider:$slider,
+          $head:$slider.find('.spa-chat-head'),
+          $toggle:$slider.find('.spa-chat-head-toggle'),
+          $title:$slider.find('.spa-chat-head-title'),
+          $sizer:$slider.find('.spa-chat-sizer'),
+          $msgs:$slider.find('.spa-chat-msgs'),
+          $box:$slider.find('.spa-chat-box'),
+          $input:$slider.find('.spa-cat-input input[type=text]')
+      };
         };
 
   configModule=function (input_map) {

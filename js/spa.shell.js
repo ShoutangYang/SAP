@@ -24,8 +24,8 @@ spa.shell = (function() {
                 '<div class="spa-shell-main-content"></div>' +
                 '</div>' +
                 '<div class="spa-shell-foot"></div>' +
-                '<div class="spa-shell-foot-chat"></div>' +
-                '<div class="spa-shell-foot-modal"></div>',
+                '<div class="spa-shell-chat"></div>' +
+                '<div class="spa-shell-modal"></div>',
             chat_extend_time: 400,
             chat_retract_time: 250,
             chat_extend_height: 450,
@@ -89,7 +89,7 @@ spa.shell = (function() {
         var $container = stateMap.$container;
         jqueryMap = {
             $container: $container,
-            $chat: $container.find('.spa-shell-foot-chat')
+            $chat: $container.find('.spa-shell-chat')
         };
     };
 
@@ -201,6 +201,11 @@ spa.shell = (function() {
         });
         $(window).bind('hashchange', onHashchange)
             .trigger('hashchange');
+
+
+       spa.chat.configModule({});
+       spa.chat.initModue(jqueryMap.$chat);
+
     };
     /*
      * 将函数导出

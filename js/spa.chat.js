@@ -8,8 +8,42 @@
 spa.chat=function () {
   var
       configMap ={
-      main_html:'<div style="padding:  1px; color: #fff;">'+'say hello to chat'+'</div>',
-          settable_map:{}
+      main_html:
+      '<div class ="spa-chat">'
+      +'<div class ="spa-chat-head">'
+            + '<div class="spa-chat-hea-toggle">+</div>'
+            +'<div class="spa-chat-head-title">'
+           +'chat'
+          +'</div>'
+      +'</div>'
+          +'<div class="spa-chat-closer">x</div> '
+            +'<div class="spa-chat-sizer"> '
+                 +'<div class="spa-chat-msgs"></div> '
+                +'<div class="spa-chat-box"> '
+                     +'<input type="text"/> '
+                        +'<div>send</div>'
+                +'</div>'
+             +'</div>'
+          +'</div>',
+
+          settable_map:{
+              slider_open_time:true,
+              slider_closed_time:true,
+              slider_opened_em:true,
+              slider_closed_em:true,
+              slider_opened_title:true,
+              slider_closed_titile:true,
+
+              chat_model:true,
+              people_model:true,
+              set_chat_anchor:true
+          },
+          slider_open_time:250,
+          slider_close_tie:250,
+          slider_opend_em:16,
+          slider_closed_em:2,
+          slider_opened_title:'click to clode',
+          slider_cloded_title:'click to open'
       },
       stateMap ={$container:null},
       jqueryMap={},

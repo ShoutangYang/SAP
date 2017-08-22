@@ -11,7 +11,7 @@ spa.chat=function () {
       main_html:
       '<div class ="spa-chat">'
       +'<div class ="spa-chat-head">'
-            + '<div class="spa-chat-hea-toggle">+</div>'
+            + '<div class="spa-chat-head-toggle">+</div>'
             +'<div class="spa-chat-head-title">'
            +'chat'
           +'</div>'
@@ -55,7 +55,7 @@ spa.chat=function () {
           px_per_em:0,
           slider_hidden_px:0,
           slider_closed_px:0,
-          slider_closed_px:0,
+          slider_opened_px:0
 
       },
       jqueryMap={},
@@ -63,7 +63,7 @@ spa.chat=function () {
       setJqueryMap,configModule,initModule,
       getEmSize,setPxSize,setSilderPosition,onClickToggle
       ;
-  getEmSize= function () {
+  getEmSize= function (elem) {
       return Number(
           getComputedStyle( elem,'').fontSize.match(/\d*.?\d*/)[0]
       );
@@ -73,6 +73,7 @@ spa.chat=function () {
       var $container = stateMap.$container,
           $append_target=stateMap.$append_target,
           $slider=$append_target.find('.spa-chat');
+
       jqueryMap={
           $container:$container,
           $slider:$slider,
@@ -103,6 +104,6 @@ spa.chat=function () {
   };
   return{
       configModule:configModule,
-      initModue:initModule
+      initModule:initModule
   };
 }();
